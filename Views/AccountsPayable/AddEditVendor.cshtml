@@ -1,0 +1,89 @@
+﻿@model VendorAddEditViewModel
+<h2>@Model.ActionName a Vendor</h2>
+
+@section scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
+
+<form asp-action="AddEditVendor" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <input type="hidden" asp-for="@Model.Vendor.VendorId" />
+    <input type="hidden" asp-for="@Model.ActionName" />
+
+    <div class="form-group">
+        <label asp-for="@Model.Vendor.VendorName">Name:</label>
+        <input type="text" asp-for="@Model.Vendor.VendorName" class="form-control" />
+        <span asp-validation-for="@Model.Vendor.VendorName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="@Model.Vendor.VendorAddress1">Address 1:</label>
+        <input type="text" asp-for="@Model.Vendor.VendorAddress1" class="form-control" />
+        <span asp-validation-for="@Model.Vendor.VendorAddress1" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="@Model.Vendor.VendorAddress2">Address 2:</label>
+        <input type="text" asp-for="@Model.Vendor.VendorAddress2" class="form-control" />
+        <span asp-validation-for="@Model.Vendor.VendorAddress2" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="@Model.Vendor.VendorCity">City:</label>
+        <input type="text" asp-for="@Model.Vendor.VendorCity" class="form-control" />
+        <span asp-validation-for="@Model.Vendor.VendorCity" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="@Model.Vendor.VendorState">State:</label>
+        <input type="text" asp-for="@Model.Vendor.VendorState" class="form-control" />
+        <span asp-validation-for="@Model.Vendor.VendorState" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="@Model.Vendor.VendorZipCode">Zip code:</label>
+        <input type="text" asp-for="@Model.Vendor.VendorZipCode" class="form-control" />
+        <span asp-validation-for="@Model.Vendor.VendorZipCode" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="@Model.Vendor.VendorPhone">Phone:</label>
+        <input type="text" asp-for="@Model.Vendor.VendorPhone" class="form-control" />
+        <span asp-validation-for="@Model.Vendor.VendorPhone" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="@Model.Vendor.VendorContactLastName">Contact Last Name:</label>
+        <input type="text" asp-for="@Model.Vendor.VendorContactLastName" class="form-control" />
+        <span asp-validation-for="@Model.Vendor.VendorContactLastName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="@Model.Vendor.DefaultTermsId">Default terms:</label>
+        <select asp-for="@Model.Vendor.DefaultTermsId" class="form-control">
+            @foreach (Term term in Model.Terms)
+            {
+                <option value="@term.TermsId">@term.TermsDueDays days is crazy!</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="@Model.Vendor.DefaultAccountNumber">Defaul account Number:</label>
+        <select asp-for="@Model.Vendor.DefaultAccountNumber" class="form-control">
+            @foreach (GeneralLedgerAccount generalLedgerAccount in Model.GeneralLedgerAccounts)
+            {
+                <option value="@generalLedgerAccount.AccountNumber">@generalLedgerAccount.AccountDescription (@generalLedgerAccount.AccountNumber)</option>
+            }
+        </select>
+    </div>
+
+    @*    <input type="hidden" asp-for="@Model.SelectedGroupNameFilterId" />
+    *@
+    <div>
+        <input type="submit" class="btn btn-primary" value="@Model.ActionName" />
+        <a asp-action="VendorsList" asp-route-nameGroupFilterId="@Model.selectedGroupNameFilterId" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>

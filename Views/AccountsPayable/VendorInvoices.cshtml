@@ -1,0 +1,102 @@
+﻿@model VendorInvoices
+
+<div class="container">
+    <div class="row">
+        <h4 class="text-left col-8">Invoice for @Model.Vendor.VendorName</h4>
+
+        @if (Model.NameGroupFilter != null)
+        {
+        <a asp-action="VendorsList" asp-route-nameGroupFilterId="@Model.NameGroupFilter.NameGroupId" class="text-right col-4">Return to @Model.NameGroupFilter.GroupName A-E</a>
+        }
+        else
+        {
+        <a asp-action="VendorsList" asp-route-nameGroupFilterId="0" class="text-right col-4">Return to Invoice List</a>
+        }
+    </div>
+
+
+    <div class="row">
+        <span style="color:gray;" class="text-left col-7">VendorAddress: @Model.Vendor.VendorAddress1</span>
+        <span style="color:gray;" class="text-right col-5">Term: @Model.Term</span>
+    </div>
+
+    @if (Model.Invoices.Count() > 0)
+    {
+    <div class="row pt-5">
+        <div class="col-3">
+            <h4 class="font-weight-bold">Invoices:</h4>
+            <ul class="nav nav-pills flex-column">
+                @foreach (var invoices in Model.Invoices)
+                {
+                    <li class="nav-item">
+                        <a asp-action="VendorInvoices"
+                           asp-route-invoiceId="@invoices.InvoiceId"
+                           class="nav-link @Model.GetActiveInvoice(invoices.InvoiceId)">Invoices #: @invoices.InvoiceNumber</a>
+                    </li>
+                }
+            </ul>
+        </div>
+        <div class="col-3"></div>
+        <div class="col-6">
+            @if (Model.SelectedInvoice != null)
+            {
+            <h4 class="font-weight-bold">Line Items for Invoice #@(Model.SelectedInvoice.InvoiceNumber)</h4>
+
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (InvoiceLineItem lineItem in Model.InvoiceLineItems)
+                    {
+                    <tr>
+                        <td>@lineItem.LineItemDescription</td>
+                        <td>@lineItem.LineItemAmount.ToString("C2")</td>
+                    </tr>
+                    }
+                    @if (Model.InvoiceLineItems.Count() > 0)
+                    {
+                    <tr>
+                        <td>Total</td>
+                        <td>@Model.SelectedInvoice.InvoiceTotal.ToString("C2")</td>
+                    </tr>
+                    }
+
+                </tbody>
+            </table>
+
+
+            <form method="post" asp-action="AddNewInvoiceLineItem"
+                  asp-route-invoiceNumber="@Model.SelectedInvoiceID"
+                  asp-route-vendorId="@Model.Vendor.VendorId"
+                  asp-route-invoiceId="@Model.SelectedInvoiceID">
+
+                <div class="form-group">
+                    <label>Description:</label>
+                    <input type="text" name="description" class="form-control" />
+                    <span class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Amount:</label>
+                    <input type="text" name="amount" class="form-control" />
+                    <span class="text-danger"></span>
+                </div>
+
+                <input type="submit" value="Add new line item" />
+            </form>
+            }
+        </div>
+    </div>
+    }
+    else
+    {
+    <div class="jumbotron pt-5 text-center">
+        <h2>No Invoice for Vendor: @Model.Vendor.VendorName</h2>
+    </div>
+    }
+</div>
+
